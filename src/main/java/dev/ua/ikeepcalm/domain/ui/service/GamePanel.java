@@ -7,12 +7,14 @@ import dev.ua.ikeepcalm.domain.level.model.source.GameEvent;
 import dev.ua.ikeepcalm.domain.level.service.LevelManager;
 import dev.ua.ikeepcalm.domain.level.type.LevelListener;
 import dev.ua.ikeepcalm.domain.move.type.MoveCommand;
+import dev.ua.ikeepcalm.util.render.Palette;
 
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -35,10 +37,11 @@ public class GamePanel extends JPanel implements LevelListener {
     );
 
     private final LevelManager manager;
+    private final Timer animation = new Timer(16, e -> repaint());
 
     public GamePanel(LevelManager manager) {
         this.manager = manager;
-        setBackground(new Color(0x33691E));
+        setBackground(Palette.INK);
         KEYS.forEach((key, direction) -> getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key, 0), direction));
         for (Direction direction : Direction.values()) {
             getActionMap().put(direction, new AbstractAction() {
@@ -48,6 +51,18 @@ public class GamePanel extends JPanel implements LevelListener {
                 }
             });
         }
+    }
+
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        animation.start();
+    }
+
+    @Override
+    public void removeNotify() {
+        animation.stop();
+        super.removeNotify();
     }
 
     @Override
@@ -82,9 +97,18 @@ public class GamePanel extends JPanel implements LevelListener {
 
         for (int r = 0; r < level.rows(); r++) {
             for (int c = 0; c < level.cols(); c++) {
-                level.tileAt(new Position(r, c)).paint(g, c * TILE, HUD + r * TILE, TILE);
+                g.setColor((r + c) % 2 == 0 ? Palette.GRASS_LIGHT : Palette.GRASS_DARK);
+                g.fillRect(c * TILE, HUD + r * TILE, TILE, TILE);
             }
         }
+        double time = System.nanoTime() / 1e9;
+        Graphics2D tiles = (Graphics2D) g.create();
+        for (int r = 0; r < level.rows(); r++) {
+            for (int c = 0; c < level.cols(); c++) {
+                level.tileAt(new Position(r, c)).paint(tiles, c * TILE, HUD + r * TILE, TILE, time);
+            }
+        }
+        tiles.dispose();
         paintPlayer(g, level.getPlayer());
 
         g.setColor(Color.WHITE);

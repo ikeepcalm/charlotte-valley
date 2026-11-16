@@ -4,6 +4,7 @@ import dev.ua.ikeepcalm.domain.level.model.Level;
 import dev.ua.ikeepcalm.domain.level.type.tile.ExitTile;
 
 import java.awt.Graphics2D;
+import java.awt.Shape;
 
 public interface DoorState {
     boolean canEnter();
@@ -12,5 +13,5 @@ public interface DoorState {
 
     void open(ExitTile tile, Level level);
 
-    void paint(Graphics2D g, int x, int y, int size);
+    void paint(Graphics2D g, Shape doorway, double time);
 }
