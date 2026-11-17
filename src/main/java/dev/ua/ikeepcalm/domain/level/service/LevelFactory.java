@@ -16,6 +16,7 @@ public class LevelFactory {
         Tile[][] grid = new Tile[rows.length][cols];
         Position player = null;
         ExitTile exit = null;
+        Position exitPosition = null;
         int flowers = 0;
 
         for (int r = 0; r < rows.length; r++) {
@@ -37,6 +38,7 @@ public class LevelFactory {
                             throw new IllegalArgumentException("Second exit at " + r + "," + c);
                         }
                         exit = new ExitTile();
+                        exitPosition = new Position(r, c);
                         grid[r][c] = exit;
                     }
                     case 'P' -> {
@@ -54,6 +56,6 @@ public class LevelFactory {
         if (player == null || exit == null || flowers == 0) {
             throw new IllegalArgumentException("Level needs a player, an exit and at least one flower");
         }
-        return new Level(grid, player, exit, flowers);
+        return new Level(grid, player, exit, exitPosition, flowers);
     }
 }

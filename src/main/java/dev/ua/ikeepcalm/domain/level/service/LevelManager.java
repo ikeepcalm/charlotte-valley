@@ -32,6 +32,18 @@ public class LevelManager implements LevelListener {
         return levels.size();
     }
 
+    public int maxRows() {
+        return levels.stream().mapToInt(rows -> rows.length).max().orElseThrow();
+    }
+
+    public int maxCols() {
+        return levels.stream().mapToInt(rows -> rows[0].length()).max().orElseThrow();
+    }
+
+    public void restart() {
+        load(index);
+    }
+
     public void execute(Command command) {
         command.execute();
         if (pendingLevel != null) {

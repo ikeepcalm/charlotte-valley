@@ -16,6 +16,8 @@ public class Level {
     @Getter
     private final ExitTile exit;
     @Getter
+    private final Position exitPosition;
+    @Getter
     private final int totalFlowers;
     @Getter
     @Setter
@@ -23,10 +25,11 @@ public class Level {
     @Getter
     private int flowersLeft;
 
-    public Level(Tile[][] grid, Position player, ExitTile exit, int totalFlowers) {
+    public Level(Tile[][] grid, Position player, ExitTile exit, Position exitPosition, int totalFlowers) {
         this.grid = grid;
         this.player = player;
         this.exit = exit;
+        this.exitPosition = exitPosition;
         this.totalFlowers = totalFlowers;
         this.flowersLeft = totalFlowers;
     }

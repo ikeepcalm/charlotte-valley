@@ -3,9 +3,16 @@ package dev.ua.ikeepcalm.util.render;
 import java.awt.Color;
 
 public class Palette {
+    public static final Color SKY_TOP = new Color(0xFFD9A8);
+    public static final Color SKY_BOTTOM = new Color(0xFFF1D6);
+    public static final Color HILL_FAR = new Color(0xA8C98A);
+    public static final Color HILL_NEAR = new Color(0x86B46A);
 
     public static final Color GRASS_LIGHT = new Color(0xA5D46A);
     public static final Color GRASS_DARK = new Color(0x97C95E);
+    public static final Color GRASS_TUFT = new Color(0x6E9F3D);
+    public static final Color SOIL = new Color(0x8D6440);
+    public static final Color SOIL_DARK = new Color(0x5E4029);
 
     public static final Color HEDGE_DARK = new Color(0x2F6B34);
     public static final Color HEDGE = new Color(0x3F8A42);
@@ -32,7 +39,13 @@ public class Palette {
     public static final Color GLOW = new Color(0xFFF4C2);
     public static final Color GLOW_EDGE = new Color(0xFFB347);
 
+    public static final Color HOOD = new Color(0xD9483B);
+    public static final Color HOOD_DARK = new Color(0xA8322A);
+    public static final Color SKIN = new Color(0xFFE2C6);
+    public static final Color BLUSH = new Color(0xFF9E9E);
+
     public static final Color INK = new Color(0x4A3427);
+    public static final Color PARCHMENT = new Color(0xFFF6E3);
     public static final Color SHADOW = new Color(0, 0, 0, 55);
 
     public static Color alpha(Color color, double alpha) {
