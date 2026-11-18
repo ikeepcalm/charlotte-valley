@@ -8,6 +8,7 @@ import dev.ua.ikeepcalm.domain.level.service.LevelManager;
 import dev.ua.ikeepcalm.domain.level.type.LevelListener;
 import dev.ua.ikeepcalm.domain.move.type.MoveCommand;
 import dev.ua.ikeepcalm.domain.ui.model.source.ParticleShape;
+import dev.ua.ikeepcalm.util.render.Painter;
 import dev.ua.ikeepcalm.util.render.Palette;
 
 import javax.swing.AbstractAction;
@@ -19,7 +20,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.EnumMap;
@@ -43,13 +43,13 @@ public class GamePanel extends JPanel implements LevelListener {
     );
 
     private final LevelManager manager;
-    private final Backdrop backdrop = new Backdrop();
     private final Hud hud = new Hud();
     private final PlayerSprite player = new PlayerSprite();
     private final Map<GameEvent, Double> since = new EnumMap<>(GameEvent.class);
     private final Timer animation = new Timer(15, e -> tick());
     private final Dimension size;
     private final ParticleField particles;
+    private final Backdrop backdrop;
     private long lastTick = System.nanoTime();
     private double time;
 
@@ -57,6 +57,7 @@ public class GamePanel extends JPanel implements LevelListener {
         this.manager = manager;
         size = new Dimension(manager.maxCols() * TILE + MARGIN * 2, TOP + manager.maxRows() * TILE + TILE / 2 + FOOTER);
         particles = new ParticleField(size.width, size.height);
+        backdrop = new Backdrop(size.width, size.height);
         for (GameEvent event : GameEvent.values()) {
             since.put(event, Double.MAX_VALUE);
         }
@@ -143,13 +144,10 @@ public class GamePanel extends JPanel implements LevelListener {
 
     @Override
     protected void paintComponent(Graphics graphics) {
-        Graphics2D g = (Graphics2D) graphics.create();
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+        Graphics2D g = Painter.smooth((Graphics2D) graphics.create());
         Level level = manager.getCurrent();
 
-        backdrop.paintSky(g, size.width, size.height, time);
+        backdrop.paintSky(g, time);
         paintBoard((Graphics2D) g.create(), level);
         particles.paint(g);
         paintOverlays(g);
@@ -162,21 +160,14 @@ public class GamePanel extends JPanel implements LevelListener {
     private void paintBoard(Graphics2D g, Level level) {
         double sinceDeath = since.get(GameEvent.PLAYER_DIED);
         if (sinceDeath < SHAKE_SECONDS) {
-            double amplitude = 8 * (1 - sinceDeath / SHAKE_SECONDS);
+            int amplitude = (int) Math.ceil(8 * (1 - sinceDeath / SHAKE_SECONDS));
             ThreadLocalRandom random = ThreadLocalRandom.current();
-            g.translate(random.nextDouble(-amplitude, amplitude), random.nextDouble(-amplitude, amplitude));
+            g.translate(random.nextInt(-amplitude, amplitude + 1), random.nextInt(-amplitude, amplitude + 1));
         }
         int ox = originX(level);
         int oy = originY(level);
-        backdrop.paintIsland(g, ox, oy, level.cols(), level.rows(), TILE);
-        for (int r = 0; r < level.rows(); r++) {
-            for (int c = 0; c < level.cols(); c++) {
-                level.tileAt(new Position(r, c)).paint(g, ox + c * TILE, oy + r * TILE, TILE, time);
-            }
-            if (r == player.shownRow()) {
-                player.paint(g, ox, oy, TILE);
-            }
-        }
+        backdrop.paintIsland(g, level, ox, oy, TILE, time);
+        player.paint(g, ox, oy, TILE);
         g.dispose();
     }
 

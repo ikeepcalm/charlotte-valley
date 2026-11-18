@@ -14,6 +14,11 @@ public class WallTile extends Tile {
     }
 
     @Override
+    public boolean isStatic() {
+        return true;
+    }
+
+    @Override
     public void paint(Graphics2D g, int x, int y, int size, double time) {
         int seed = Painter.seed(x, y);
         Painter.shadow(g, x + size * 0.5, y + size * 0.88, size * 1.05, size * 0.3);

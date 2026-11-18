@@ -11,7 +11,6 @@ import dev.ua.ikeepcalm.util.render.Palette;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 public class CharlotteValley {
@@ -38,8 +37,7 @@ public class CharlotteValley {
 
     private static BufferedImage icon() {
         BufferedImage image = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = image.createGraphics();
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        Graphics2D g = Painter.smooth(image.createGraphics());
         Painter.blossom(g, 32, 34, 26, Palette.PETALS[0], 0);
         g.dispose();
         return image;

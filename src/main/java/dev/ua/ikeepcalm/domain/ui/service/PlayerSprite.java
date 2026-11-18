@@ -47,10 +47,6 @@ public class PlayerSprite {
         sinceBump = 0;
     }
 
-    public int shownRow() {
-        return (int) Math.round(row);
-    }
-
     private double centerX(int originX, int tile) {
         return originX + (col + 0.5) * tile;
     }

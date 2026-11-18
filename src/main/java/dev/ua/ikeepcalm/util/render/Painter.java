@@ -3,6 +3,7 @@ package dev.ua.ikeepcalm.util.render;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 
@@ -30,6 +31,13 @@ public class Painter {
     public static void circle(Graphics2D g, Paint paint, double cx, double cy, double radius) {
         g.setPaint(paint);
         g.fill(new Ellipse2D.Double(cx - radius, cy - radius, radius * 2, radius * 2));
+    }
+
+    public static Graphics2D smooth(Graphics2D g) {
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+        return g;
     }
 
     public static int seed(int x, int y) {

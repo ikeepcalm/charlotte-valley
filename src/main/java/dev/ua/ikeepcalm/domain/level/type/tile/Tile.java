@@ -16,5 +16,9 @@ public abstract class Tile {
     public void onLeave(Level level) {
     }
 
+    public boolean isStatic() {
+        return false;
+    }
+
     public abstract void paint(Graphics2D g, int x, int y, int size, double time);
 }
