@@ -27,6 +27,42 @@ public class Levels {
                     "WOWWWOWOW",
                     "WOOOPOOOW",
                     "WWWWWWWWW"
+            },
+            new String[]{
+                    "WWWWWWWWW",
+                    "WFOOSOOFW",
+                    "WOWWOWWOW",
+                    "WOOOPOOOW",
+                    "WOWWSWWOW",
+                    "WOOOEOOOW",
+                    "WWWWWWWWW"
+            },
+            new String[]{
+                    "WWWWWWWWW",
+                    "WPOSOOOFW",
+                    "WWWOWWWSW",
+                    "WFOSOEWOW",
+                    "WOWWWOWOW",
+                    "WOOOSOOOW",
+                    "WWWWWWWWW"
+            },
+            new String[]{
+                    "WWWWWWWWW",
+                    "WFSOOOSFW",
+                    "WOWOWOWOW",
+                    "WOSOPOSOW",
+                    "WOWOWOWOW",
+                    "WFSOEOSFW",
+                    "WWWWWWWWW"
+            },
+            new String[]{
+                    "WWWWWWWWW",
+                    "WOOSFSOOW",
+                    "WOWOWOWOW",
+                    "WSOSPSOSW",
+                    "WOWOWOWOW",
+                    "WFOSESOFW",
+                    "WWWWWWWWW"
             }
     );
 }
