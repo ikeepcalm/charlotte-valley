@@ -2,7 +2,8 @@ package dev.ua.ikeepcalm.domain.level.type.tile;
 
 import dev.ua.ikeepcalm.domain.level.model.Level;
 
-import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.util.Optional;
 
 public abstract class Tile {
 
@@ -20,5 +21,5 @@ public abstract class Tile {
         return false;
     }
 
-    public abstract void paint(Graphics2D g, int x, int y, int size, double time);
+    public abstract Optional<BufferedImage> sprite(double time, int seed);
 }

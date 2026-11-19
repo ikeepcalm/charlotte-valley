@@ -1,24 +1,32 @@
 package dev.ua.ikeepcalm.domain.ui.service;
 
 import dev.ua.ikeepcalm.domain.level.model.Level;
-import dev.ua.ikeepcalm.util.render.Painter;
 import dev.ua.ikeepcalm.util.render.Palette;
+import dev.ua.ikeepcalm.util.render.Sprites;
 
-import java.awt.BasicStroke;
+import java.awt.AlphaComposite;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.RoundRectangle2D;
+import java.awt.image.BufferedImage;
 
 public class Hud {
     private static final Font TITLE = new Font("Georgia", Font.BOLD | Font.ITALIC, 26);
     private static final Font LABEL = new Font("Georgia", Font.ITALIC, 16);
     private static final Font BANNER = new Font("Georgia", Font.BOLD, 44);
     private static final Font HINT = new Font("Segoe UI", Font.PLAIN, 13);
+    private static final int BAR_HEIGHT = 58;
+
+    private BufferedImage bar;
 
     public void paintBar(Graphics2D g, int width, Level level, int levelIndex, int levelCount) {
-        ribbon(g, 16, 14, width - 32, 58, 1);
+        if (bar == null || bar.getWidth() != width - 32) {
+            bar = new BufferedImage(width - 32, BAR_HEIGHT + Sprites.RIBBON_SHADOW, BufferedImage.TYPE_INT_ARGB_PRE);
+            Graphics2D canvas = bar.createGraphics();
+            Sprites.drawRibbon(canvas, 0, 0, bar.getWidth(), BAR_HEIGHT);
+            canvas.dispose();
+        }
+        g.drawImage(bar, 16, 14, null);
         g.setColor(Palette.INK);
         g.setFont(TITLE);
         g.drawString("Charlotte Valley", 36, 51);
@@ -29,15 +37,9 @@ public class Hud {
 
         int total = level.getTotalFlowers();
         int collected = total - level.getFlowersLeft();
-        g.setStroke(new BasicStroke(2f));
         for (int i = 0; i < total; i++) {
-            double cx = width - 44 - (total - 1 - i) * 32;
-            if (i < collected) {
-                Painter.blossom(g, cx, 43, 11, Palette.PETALS[i % Palette.PETALS.length], 0);
-            } else {
-                g.setColor(Palette.alpha(Palette.INK, 0.25));
-                g.draw(new Ellipse2D.Double(cx - 10, 33, 20, 20));
-            }
+            int x = width - 57 - (total - 1 - i) * 32;
+            g.drawImage(i < collected ? Sprites.BLOSSOM.frame(i) : Sprites.SLOT, x, 30, null);
         }
     }
 
@@ -51,23 +53,15 @@ public class Hud {
         g.setFont(BANNER);
         int bannerWidth = Math.max(g.getFontMetrics().stringWidth(title), g.getFontMetrics(LABEL).stringWidth(subtitle)) + 80;
         int top = height / 2 - 60;
-        ribbon(g, (width - bannerWidth) / 2, top, bannerWidth, 112, opacity);
+        Graphics2D faded = (Graphics2D) g.create();
+        faded.setComposite(AlphaComposite.SrcOver.derive((float) opacity));
+        Sprites.drawRibbon(faded, (width - bannerWidth) / 2, top, bannerWidth, 112);
+        faded.dispose();
         g.setColor(Palette.alpha(Palette.INK, opacity));
         centered(g, title, width / 2, top + 58);
         g.setFont(LABEL);
         g.setColor(Palette.alpha(Palette.INK, opacity * 0.7));
         centered(g, subtitle, width / 2, top + 90);
-    }
-
-    private void ribbon(Graphics2D g, int x, int y, int width, int height, double opacity) {
-        g.setColor(Palette.alpha(Palette.SHADOW, opacity));
-        g.fill(new RoundRectangle2D.Double(x, y + 4, width, height, 22, 22));
-        var body = new RoundRectangle2D.Double(x, y, width, height, 22, 22);
-        g.setColor(Palette.alpha(Palette.PARCHMENT, opacity * 0.94));
-        g.fill(body);
-        g.setColor(Palette.alpha(Palette.GOLD, opacity * 0.8));
-        g.setStroke(new BasicStroke(2f));
-        g.draw(new RoundRectangle2D.Double(x + 5, y + 5, width - 10, height - 10, 16, 16));
     }
 
     private void centered(Graphics2D g, String text, int cx, int baseline) {

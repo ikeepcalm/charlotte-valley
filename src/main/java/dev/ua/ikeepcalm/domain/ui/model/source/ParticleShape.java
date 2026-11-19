@@ -1,66 +1,60 @@
 package dev.ua.ikeepcalm.domain.ui.model.source;
 
 import dev.ua.ikeepcalm.domain.ui.model.Particle;
-import dev.ua.ikeepcalm.util.render.Painter;
-import dev.ua.ikeepcalm.util.render.Palette;
+import dev.ua.ikeepcalm.util.render.SpriteSheet;
+import dev.ua.ikeepcalm.util.render.Sprites;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Path2D;
+import java.awt.image.BufferedImage;
 
-@Getter
 @RequiredArgsConstructor
 public enum ParticleShape {
-    PETAL(260) {
-        @Override
-        void draw(Graphics2D g, Particle p, double opacity) {
-            g.setColor(Palette.alpha(p.getColor(), opacity));
-            g.fill(new Ellipse2D.Double(-p.getSize() / 2, -p.getSize() / 4, p.getSize(), p.getSize() / 2));
-        }
-    },
-    SPARKLE(-20) {
-        @Override
-        void draw(Graphics2D g, Particle p, double opacity) {
-            double r = p.getSize();
-            Path2D.Double star = new Path2D.Double();
-            star.moveTo(0, -r);
-            star.quadTo(0, 0, r, 0);
-            star.quadTo(0, 0, 0, r);
-            star.quadTo(0, 0, -r, 0);
-            star.quadTo(0, 0, 0, -r);
-            g.setColor(Palette.alpha(p.getColor(), opacity));
-            g.fill(star);
-        }
-    },
-    POLLEN(0) {
-        @Override
-        void draw(Graphics2D g, Particle p, double opacity) {
-            Painter.circle(g, Palette.alpha(p.getColor(), opacity * 0.35), 0, 0, p.getSize() * 1.8);
-            Painter.circle(g, Palette.alpha(p.getColor(), opacity * 0.9), 0, 0, p.getSize() * 0.6);
-        }
-
+    PETAL(Sprites.PETAL, 0, 4, 260, 12),
+    GOLD_SPARKLE(Sprites.SPARKLE, 0, 3, -20, 11),
+    RED_SPARKLE(Sprites.SPARKLE, 3, 2, -20, 11),
+    POLLEN(Sprites.POLLEN, 0, 2, 0, 3) {
         @Override
         double opacity(Particle p) {
             return Math.sin(Math.PI * p.progress());
         }
     };
 
+    private final SpriteSheet sheet;
+    private final int firstFrame;
+    private final int frameCount;
+    @Getter
     private final double gravity;
+    private final double baseSize;
 
-    abstract void draw(Graphics2D g, Particle p, double opacity);
+    public BufferedImage image(int index) {
+        return sheet.frame(firstFrame + Math.floorMod(index, frameCount));
+    }
+
+    public double scale(double size) {
+        return size / baseSize;
+    }
 
     double opacity(Particle p) {
         return 1 - p.progress();
     }
 
     public void paint(Graphics2D g, Particle p) {
-        AffineTransform saved = g.getTransform();
-        g.translate(p.getX(), p.getY());
-        g.rotate(p.getAngle());
-        draw(g, p, opacity(p));
-        g.setTransform(saved);
+        BufferedImage image = p.getImage();
+        double width = image.getWidth() * p.getScale();
+        double height = image.getHeight() * p.getScale();
+        Graphics2D faded = (Graphics2D) g.create();
+        faded.setComposite(AlphaComposite.SrcOver.derive((float) Math.clamp(opacity(p), 0, 1)));
+        if (p.getAngle() == 0) {
+            faded.drawImage(image, (int) (p.getX() - width / 2), (int) (p.getY() - height / 2), (int) width, (int) height, null);
+        } else {
+            faded.translate(p.getX(), p.getY());
+            faded.rotate(p.getAngle());
+            faded.scale(p.getScale(), p.getScale());
+            faded.drawImage(image, -image.getWidth() / 2, -image.getHeight() / 2, null);
+        }
+        faded.dispose();
     }
 }

@@ -3,8 +3,7 @@ package dev.ua.ikeepcalm.domain.level.type.state;
 import dev.ua.ikeepcalm.domain.level.model.Level;
 import dev.ua.ikeepcalm.domain.level.type.tile.ExitTile;
 
-import java.awt.Graphics2D;
-import java.awt.Shape;
+import java.awt.image.BufferedImage;
 
 public interface DoorState {
     boolean canEnter();
@@ -13,5 +12,5 @@ public interface DoorState {
 
     void open(ExitTile tile, Level level);
 
-    void paint(Graphics2D g, Shape doorway, double time);
+    BufferedImage sprite(double time);
 }

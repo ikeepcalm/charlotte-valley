@@ -1,10 +1,12 @@
 package dev.ua.ikeepcalm.domain.level.type.tile;
 
-import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.util.Optional;
 
 public class AirTile extends Tile {
 
     @Override
-    public void paint(Graphics2D g, int x, int y, int size, double time) {
+    public Optional<BufferedImage> sprite(double time, int seed) {
+        return Optional.empty();
     }
 }

@@ -8,26 +8,27 @@ import dev.ua.ikeepcalm.domain.level.service.LevelManager;
 import dev.ua.ikeepcalm.domain.level.type.LevelListener;
 import dev.ua.ikeepcalm.domain.move.type.MoveCommand;
 import dev.ua.ikeepcalm.domain.ui.model.source.ParticleShape;
-import dev.ua.ikeepcalm.util.render.Painter;
 import dev.ua.ikeepcalm.util.render.Palette;
+import dev.ua.ikeepcalm.util.render.Sprites;
 
 import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
-import java.awt.Color;
+import java.awt.AlphaComposite;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RadialGradientPaint;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static dev.ua.ikeepcalm.util.render.Sprites.TILE;
+
 public class GamePanel extends JPanel implements LevelListener {
-    private static final int TILE = 72;
     private static final int TOP = 88;
     private static final int MARGIN = 80;
     private static final int FOOTER = 40;
@@ -119,19 +120,19 @@ public class GamePanel extends JPanel implements LevelListener {
             case LEVEL_STARTED -> player.snap(level.getPlayer());
             case PLAYER_MOVED -> player.moveTo(level.getPlayer());
             case PLAYER_BLOCKED -> player.bump();
-            case FLOWER_COLLECTED -> burstAt(level, level.getPlayer(), ParticleShape.PETAL, 22, Palette.PETALS);
-            case EXIT_OPENED -> burstAt(level, level.getExitPosition(), ParticleShape.SPARKLE, 26, Palette.GLOW, Palette.GOLD, Color.WHITE);
-            case PLAYER_DIED -> burstAt(level, level.getPlayer(), ParticleShape.SPARKLE, 16, Palette.DANGER, Palette.HOOD);
+            case FLOWER_COLLECTED -> burstAt(level, level.getPlayer(), ParticleShape.PETAL, 22);
+            case EXIT_OPENED -> burstAt(level, level.getExitPosition(), ParticleShape.GOLD_SPARKLE, 26);
+            case PLAYER_DIED -> burstAt(level, level.getPlayer(), ParticleShape.RED_SPARKLE, 16);
             case GAME_WON -> {
                 for (int i = 1; i <= 5; i++) {
-                    particles.burst(ParticleShape.PETAL, size.width * i / 6.0, size.height * 0.35, 24, Palette.PETALS);
+                    particles.burst(ParticleShape.PETAL, size.width * i / 6.0, size.height * 0.35, 24);
                 }
             }
         }
     }
 
-    private void burstAt(Level level, Position cell, ParticleShape shape, int count, Color... colors) {
-        particles.burst(shape, originX(level) + (cell.getCol() + 0.5) * TILE, originY(level) + (cell.getRow() + 0.5) * TILE, count, colors);
+    private void burstAt(Level level, Position cell, ParticleShape shape, int count) {
+        particles.burst(shape, originX(level) + (cell.getCol() + 0.5) * TILE, originY(level) + (cell.getRow() + 0.5) * TILE, count);
     }
 
     private int originX(Level level) {
@@ -144,7 +145,9 @@ public class GamePanel extends JPanel implements LevelListener {
 
     @Override
     protected void paintComponent(Graphics graphics) {
-        Graphics2D g = Painter.smooth((Graphics2D) graphics.create());
+        Graphics2D g = (Graphics2D) graphics.create();
+        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         Level level = manager.getCurrent();
 
         backdrop.paintSky(g, time);
@@ -166,8 +169,8 @@ public class GamePanel extends JPanel implements LevelListener {
         }
         int ox = originX(level);
         int oy = originY(level);
-        backdrop.paintIsland(g, level, ox, oy, TILE, time);
-        player.paint(g, ox, oy, TILE);
+        backdrop.paintIsland(g, level, ox, oy, time);
+        player.paint(g, ox, oy);
         g.dispose();
     }
 
@@ -175,10 +178,10 @@ public class GamePanel extends JPanel implements LevelListener {
         double sinceDeath = since.get(GameEvent.PLAYER_DIED);
         double sinceComplete = since.get(GameEvent.LEVEL_COMPLETED);
         if (sinceDeath < FLASH_SECONDS) {
-            double strength = 0.55 * (1 - sinceDeath / FLASH_SECONDS);
-            g.setPaint(new RadialGradientPaint(size.width / 2f, size.height / 2f, size.width * 0.75f, new float[]{0.3f, 1f},
-                    new Color[]{Palette.alpha(Palette.DANGER, 0), Palette.alpha(Palette.DANGER, strength)}));
-            g.fillRect(0, 0, size.width, size.height);
+            Graphics2D faded = (Graphics2D) g.create();
+            faded.setComposite(AlphaComposite.SrcOver.derive((float) (1 - sinceDeath / FLASH_SECONDS)));
+            faded.drawImage(Sprites.VIGNETTE, 0, 0, size.width, size.height, null);
+            faded.dispose();
         }
         if (sinceComplete < FLASH_SECONDS) {
             g.setColor(Palette.alpha(Palette.GLOW, 1 - sinceComplete / FLASH_SECONDS));

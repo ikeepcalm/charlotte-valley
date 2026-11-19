@@ -29,10 +29,7 @@ public class LevelFactory {
                     case 'O' -> grid[r][c] = new AirTile();
                     case 'W' -> grid[r][c] = new WallTile();
                     case 'S' -> grid[r][c] = new SpikeTile();
-                    case 'F' -> {
-                        grid[r][c] = new FlowerTile();
-                        flowers++;
-                    }
+                    case 'F' -> grid[r][c] = new FlowerTile(flowers++);
                     case 'E' -> {
                         if (exit != null) {
                             throw new IllegalArgumentException("Second exit at " + r + "," + c);

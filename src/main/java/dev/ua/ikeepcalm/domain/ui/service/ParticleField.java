@@ -2,9 +2,7 @@ package dev.ua.ikeepcalm.domain.ui.service;
 
 import dev.ua.ikeepcalm.domain.ui.model.Particle;
 import dev.ua.ikeepcalm.domain.ui.model.source.ParticleShape;
-import dev.ua.ikeepcalm.util.render.Palette;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +25,13 @@ public class ParticleField {
         }
     }
 
-    public void burst(ParticleShape shape, double x, double y, int count, Color... colors) {
+    public void burst(ParticleShape shape, double x, double y, int count) {
         for (int i = 0; i < count; i++) {
             double angle = random.nextDouble() * Math.PI * 2;
             double speed = 70 + random.nextDouble() * 150;
-            bursts.add(new Particle(shape, colors[i % colors.length], x, y,
+            bursts.add(new Particle(shape, shape.image(i), x, y,
                     Math.cos(angle) * speed, Math.sin(angle) * speed - 110,
-                    5 + random.nextDouble() * 6, angle, (random.nextDouble() - 0.5) * 12,
+                    shape.scale(5 + random.nextDouble() * 6), angle, (random.nextDouble() - 0.5) * 12,
                     0.7 + random.nextDouble() * 0.6, 0));
         }
     }
@@ -57,9 +55,10 @@ public class ParticleField {
     }
 
     private Particle pollen(double age) {
-        return new Particle(ParticleShape.POLLEN, random.nextBoolean() ? Color.WHITE : Palette.GLOW,
+        ParticleShape shape = ParticleShape.POLLEN;
+        return new Particle(shape, shape.image(random.nextInt()),
                 random.nextDouble() * width, random.nextDouble() * height,
                 8 + random.nextDouble() * 14, -4 - random.nextDouble() * 8,
-                1.5 + random.nextDouble() * 2, 0, 0, 5 + random.nextDouble() * 6, age);
+                shape.scale(1.5 + random.nextDouble() * 2), 0, 0, 5 + random.nextDouble() * 6, age);
     }
 }
