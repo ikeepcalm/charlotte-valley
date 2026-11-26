@@ -12,14 +12,15 @@ public class Particle {
 
     private final ParticleShape shape;
     private final BufferedImage image;
-    private final double scale;
-    private final double spin;
-    private final double life;
+
     private double x;
     private double y;
     private double vx;
     private double vy;
+    private final double scale;
     private double angle;
+    private final double spin;
+    private final double life;
     private double age;
 
     public void step(double dt) {
