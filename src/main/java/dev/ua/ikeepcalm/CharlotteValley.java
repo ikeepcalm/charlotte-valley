@@ -1,11 +1,11 @@
 package dev.ua.ikeepcalm;
 
-import dev.ua.ikeepcalm.domain.level.service.LevelManager;
-import dev.ua.ikeepcalm.domain.level.service.Levels;
-import dev.ua.ikeepcalm.domain.sound.service.ClipSoundAdapter;
-import dev.ua.ikeepcalm.domain.sound.type.SoundPlayer;
-import dev.ua.ikeepcalm.domain.ui.service.GamePanel;
-import dev.ua.ikeepcalm.util.render.Sprites;
+import dev.ua.ikeepcalm.level.LevelManager;
+import dev.ua.ikeepcalm.level.Levels;
+import dev.ua.ikeepcalm.render.Sprites;
+import dev.ua.ikeepcalm.sound.ClipSoundAdapter;
+import dev.ua.ikeepcalm.sound.type.SoundPlayer;
+import dev.ua.ikeepcalm.ui.GamePanel;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;

@@ -1,14 +1,14 @@
 package dev.ua.ikeepcalm;
 
-import dev.ua.ikeepcalm.domain.level.model.Level;
-import dev.ua.ikeepcalm.domain.level.model.Position;
-import dev.ua.ikeepcalm.domain.level.model.source.Direction;
-import dev.ua.ikeepcalm.domain.level.model.source.GameEvent;
-import dev.ua.ikeepcalm.domain.level.service.LevelFactory;
-import dev.ua.ikeepcalm.domain.level.service.LevelManager;
-import dev.ua.ikeepcalm.domain.level.service.Levels;
-import dev.ua.ikeepcalm.domain.level.type.state.OpenDoorState;
-import dev.ua.ikeepcalm.domain.move.type.MoveCommand;
+import dev.ua.ikeepcalm.level.Level;
+import dev.ua.ikeepcalm.level.LevelFactory;
+import dev.ua.ikeepcalm.level.LevelManager;
+import dev.ua.ikeepcalm.level.Levels;
+import dev.ua.ikeepcalm.level.Position;
+import dev.ua.ikeepcalm.level.source.Direction;
+import dev.ua.ikeepcalm.level.source.GameEvent;
+import dev.ua.ikeepcalm.level.state.OpenDoorState;
+import dev.ua.ikeepcalm.move.MoveCommand;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LevelTest {
+
     private final List<GameEvent> events = new ArrayList<>();
 
     private LevelManager start(String... rows) {

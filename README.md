@@ -66,11 +66,18 @@ new String[]{
 ```
 src/main/java/dev/ua/ikeepcalm/
   CharlotteValley.java       starts the game
-  domain/level/              level model, tiles, spike and door states, factory, manager
-  domain/move/               move command
-  domain/sound/              sound adapter
-  domain/ui/                 game window, HUD, player sprite, particles
-  util/render/               sprite loading
+  level/                     level model, factory, manager, level list
+  level/source/              enums: directions and game events
+  level/type/                interfaces: level listener, spike and door states
+  level/tile/                hedge, grass, flower, spike and exit tiles
+  level/state/               spike and door state implementations
+  move/                      move command
+  move/type/                 command interface
+  sound/                     sound adapter
+  sound/type/                sound player interface
+  ui/                        game window, HUD, player sprite, particles
+  ui/source/                 particle shape enum
+  render/                    sprite loading, colours
 src/main/resources/
   sprites/                   PNG sprites and sprite sheets
   sounds/                    WAV sound effects
