@@ -2,7 +2,7 @@ package dev.ua.ikeepcalm.ui;
 
 import dev.ua.ikeepcalm.ui.source.ParticleShape;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

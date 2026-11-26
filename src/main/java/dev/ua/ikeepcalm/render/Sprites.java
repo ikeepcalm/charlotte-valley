@@ -1,7 +1,7 @@
 package dev.ua.ikeepcalm.render;
 
 import javax.imageio.ImageIO;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,9 +12,6 @@ public class Sprites {
     public static final int TILE = 72;
     public static final int PAD = 18;
     public static final int RIBBON_SHADOW = 4;
-    private static final int ISLAND_EDGE = 84;
-    private static final int RIBBON_EDGE = 26;
-
     public static final SpriteSheet HEDGE = sheet("hedge", 0);
     public static final SpriteSheet[] FLOWERS = {sheet("flower_0", 8), sheet("flower_1", 8), sheet("flower_2", 8), sheet("flower_3", 8)};
     public static final SpriteSheet SPIKE_RAISED = sheet("spike_raised", 5);
@@ -25,7 +22,6 @@ public class Sprites {
     public static final SpriteSheet PETAL = sheet("petal", 0);
     public static final SpriteSheet SPARKLE = sheet("sparkle", 0);
     public static final SpriteSheet POLLEN = sheet("pollen", 0);
-
     public static final BufferedImage SPIKE_LOWERED = image("spike_lowered");
     public static final BufferedImage DOOR_LOCKED = image("door_locked");
     public static final BufferedImage SHADOW = image("shadow");
@@ -34,6 +30,8 @@ public class Sprites {
     public static final BufferedImage SLOT = image("slot");
     public static final BufferedImage VIGNETTE = image("vignette");
     public static final BufferedImage ICON = image("icon");
+    private static final int ISLAND_EDGE = 84;
+    private static final int RIBBON_EDGE = 26;
     private static final BufferedImage ISLAND = image("island");
     private static final BufferedImage RIBBON = image("ribbon");
 

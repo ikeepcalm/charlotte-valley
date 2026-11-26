@@ -3,7 +3,7 @@ package dev.ua.ikeepcalm.ui;
 import dev.ua.ikeepcalm.level.Position;
 import dev.ua.ikeepcalm.render.Sprites;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.ThreadLocalRandom;
 

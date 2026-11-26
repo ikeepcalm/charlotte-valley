@@ -7,8 +7,7 @@ import dev.ua.ikeepcalm.sound.ClipSoundAdapter;
 import dev.ua.ikeepcalm.sound.type.SoundPlayer;
 import dev.ua.ikeepcalm.ui.GamePanel;
 
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 public class CharlotteValley {
 
@@ -16,6 +15,7 @@ public class CharlotteValley {
         SoundPlayer sound = new ClipSoundAdapter();
         SwingUtilities.invokeLater(() -> {
             LevelManager manager = new LevelManager(Levels.ALL);
+
             GamePanel panel = new GamePanel(manager);
             manager.subscribe(panel);
             manager.subscribe((event, level) -> sound.play(event));

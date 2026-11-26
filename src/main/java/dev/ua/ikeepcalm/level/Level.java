@@ -29,7 +29,8 @@ public class Level {
     private int flowersLeft;
 
     @Setter
-    private LevelListener listener = (event, level) -> {};
+    private LevelListener listener = (event, level) -> {
+    };
 
     public Level(Tile[][] grid, Position player, ExitTile exit, Position exitPosition, int totalFlowers) {
         this.grid = grid;

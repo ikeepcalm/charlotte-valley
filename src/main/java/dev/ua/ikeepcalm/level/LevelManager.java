@@ -72,7 +72,8 @@ public class LevelManager implements LevelListener {
                 }
                 pendingLevel = (index + 1) % levels.size();
             }
-            default -> {}
+            default -> {
+            }
         }
     }
 

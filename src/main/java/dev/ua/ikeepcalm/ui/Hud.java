@@ -4,10 +4,7 @@ import dev.ua.ikeepcalm.level.Level;
 import dev.ua.ikeepcalm.render.Palette;
 import dev.ua.ikeepcalm.render.Sprites;
 
-import java.awt.AlphaComposite;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Hud {

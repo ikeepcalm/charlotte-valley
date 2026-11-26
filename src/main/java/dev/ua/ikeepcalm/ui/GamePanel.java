@@ -11,15 +11,8 @@ import dev.ua.ikeepcalm.render.Palette;
 import dev.ua.ikeepcalm.render.Sprites;
 import dev.ua.ikeepcalm.ui.source.ParticleShape;
 
-import javax.swing.AbstractAction;
-import javax.swing.JPanel;
-import javax.swing.KeyStroke;
-import javax.swing.Timer;
-import java.awt.AlphaComposite;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Graphics;
-import java.awt.RenderingHints;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.EnumMap;
@@ -67,15 +60,6 @@ public class GamePanel extends JPanel implements LevelListener {
         bindKeys();
     }
 
-    private void bindKeys() {
-        KEYS.forEach((key, direction) -> getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key, 0), direction));
-        for (Direction direction : Direction.values()) {
-            getActionMap().put(direction, action(() -> manager.execute(new MoveCommand(manager.getCurrent(), direction))));
-        }
-        getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_R, 0), "restart");
-        getActionMap().put("restart", action(manager::restart));
-    }
-
     private static AbstractAction action(Runnable runnable) {
         return new AbstractAction() {
             @Override
@@ -83,6 +67,19 @@ public class GamePanel extends JPanel implements LevelListener {
                 runnable.run();
             }
         };
+    }
+
+    private static double fade(double elapsed, double duration) {
+        return Math.clamp(Math.min(elapsed / 0.25, (duration - elapsed) / 0.6), 0, 1);
+    }
+
+    private void bindKeys() {
+        KEYS.forEach((key, direction) -> getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key, 0), direction));
+        for (Direction direction : Direction.values()) {
+            getActionMap().put(direction, action(() -> manager.execute(new MoveCommand(manager.getCurrent(), direction))));
+        }
+        getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_R, 0), "restart");
+        getActionMap().put("restart", action(manager::restart));
     }
 
     @Override
@@ -200,9 +197,5 @@ public class GamePanel extends JPanel implements LevelListener {
             hud.paintBanner(g, size.width, size.height, "Level " + (manager.getIndex() + 1),
                     "Gather every flower to wake the gate", fade(sinceBanner, BANNER_SECONDS));
         }
-    }
-
-    private static double fade(double elapsed, double duration) {
-        return Math.clamp(Math.min(elapsed / 0.25, (duration - elapsed) / 0.6), 0, 1);
     }
 }

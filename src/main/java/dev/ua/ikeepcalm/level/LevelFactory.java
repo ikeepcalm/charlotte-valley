@@ -1,11 +1,6 @@
 package dev.ua.ikeepcalm.level;
 
-import dev.ua.ikeepcalm.level.tile.AirTile;
-import dev.ua.ikeepcalm.level.tile.ExitTile;
-import dev.ua.ikeepcalm.level.tile.FlowerTile;
-import dev.ua.ikeepcalm.level.tile.SpikeTile;
-import dev.ua.ikeepcalm.level.tile.Tile;
-import dev.ua.ikeepcalm.level.tile.WallTile;
+import dev.ua.ikeepcalm.level.tile.*;
 
 public class LevelFactory {
 

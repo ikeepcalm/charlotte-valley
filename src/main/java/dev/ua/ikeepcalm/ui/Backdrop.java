@@ -4,8 +4,7 @@ import dev.ua.ikeepcalm.level.Level;
 import dev.ua.ikeepcalm.level.Position;
 import dev.ua.ikeepcalm.render.Sprites;
 
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import static dev.ua.ikeepcalm.render.Sprites.PAD;
@@ -40,26 +39,6 @@ public class Backdrop {
         }
     }
 
-    public void paintSky(Graphics2D g, double time) {
-        g.drawImage(sky, 0, 0, null);
-        for (int i = 0; i < 4; i++) {
-            BufferedImage cloud = clouds[i % clouds.length];
-            double scale = (double) cloud.getWidth() / Sprites.CLOUD.getWidth();
-            double x = (time * (6 + i * 2) + i * width / 3.0) % (width + 240) - 120;
-            double y = height * (0.12 + 0.07 * (i % 2));
-            g.drawImage(cloud, (int) (x - 24 * scale), (int) (y - 38 * scale), null);
-        }
-    }
-
-    public void paintIsland(Graphics2D g, Level level, int x, int y, double time) {
-        if (level != islandLevel) {
-            island = bakeIsland(level);
-            islandLevel = level;
-        }
-        g.drawImage(island, x - TILE, y - TILE, null);
-        paintTiles(g, level, x, y, time, false);
-    }
-
     private static BufferedImage bakeIsland(Level level) {
         BufferedImage image = new BufferedImage((level.cols() + 2) * TILE, (level.rows() + 3) * TILE, BufferedImage.TYPE_INT_ARGB_PRE);
         Graphics2D g = image.createGraphics();
@@ -91,5 +70,25 @@ public class Backdrop {
     private static int seed(int row, int col) {
         int hash = row * 73856093 ^ col * 19349663;
         return (hash ^ (hash >>> 13)) & 0x7fffffff;
+    }
+
+    public void paintSky(Graphics2D g, double time) {
+        g.drawImage(sky, 0, 0, null);
+        for (int i = 0; i < 4; i++) {
+            BufferedImage cloud = clouds[i % clouds.length];
+            double scale = (double) cloud.getWidth() / Sprites.CLOUD.getWidth();
+            double x = (time * (6 + i * 2) + i * width / 3.0) % (width + 240) - 120;
+            double y = height * (0.12 + 0.07 * (i % 2));
+            g.drawImage(cloud, (int) (x - 24 * scale), (int) (y - 38 * scale), null);
+        }
+    }
+
+    public void paintIsland(Graphics2D g, Level level, int x, int y, double time) {
+        if (level != islandLevel) {
+            island = bakeIsland(level);
+            islandLevel = level;
+        }
+        g.drawImage(island, x - TILE, y - TILE, null);
+        paintTiles(g, level, x, y, time, false);
     }
 }

@@ -1,6 +1,6 @@
 package dev.ua.ikeepcalm.render;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class Palette {
 
